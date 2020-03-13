@@ -18,6 +18,8 @@
 //
 // Create a card for each of the articles and add the card to the DOM.
 
+const cardEntryPoint = document.querySelector('.cards-container');
+
 axios.get('https://lambda-times-backend.herokuapp.com/articles')
   .then(response => {
     // console.log(response);
@@ -31,18 +33,34 @@ axios.get('https://lambda-times-backend.herokuapp.com/articles')
       // console.log(topic[1]); // An Array of data
       topic[1].forEach(item => {
         // console.log(item);
-        console.log(item.headline);
-        console.log(item.authorPhoto);
-        console.log(item.authorName);
-      })
+        // console.log(item.headline);
+        // console.log(item.authorPhoto);
+        // console.log(item.authorName);
 
+        function NewCard(data) {
+          const newCard = document.createElement('div'),
+            newHeadline = document.createElement('div'),
+            newAuthor = document.createElement('div'),
+            newImgContainer = document.createElement('div'),
+            newImg = document.createElement('img'),
+            newAuthorsName = document.createElement('span');
+          newCard.classList.add("card");
+          newHeadline.classList.add("headline");
+          newAuthor.classList.add("author");
+          newImgContainer.classList.add("img-container");
+          newImg.src = data.authorPhoto;
+          newHeadline.textContent = data.headline;
+          newAuthorsName.textContent = `By ${data.authorName}`
+          newImgContainer.append(newImg);
+          newAuthor.append(newImgContainer, newAuthorsName);
+          newCard.append(newHeadline, newAuthor);
+
+          return newCard;
+        }
+        cardEntryPoint.append(NewCard(item));
+
+      })
     })
-    // console.log(newTopic[0]);
-    // console.log(newTopic.length);
-    console.log(newTopic[0][1][0].headline);
-    // newTopic.forEach(topic => {
-    //   console.log(topic[0]);
-    // })
   })
   .catch(error => {
     console.log("the data was not returned", error);
